@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .login_content{
+            padding:0 30px 0 30px;
+        }
+        .login_y{
+            height:26px;
+            border-bottom: 1px solid #888;
+            margin-top: 40px;
+        }
+        .login_y input{
+            outline: none;
+        }
+        .login_content>button:first-of-type{
+            width: 100%;
+            background-color: #e3007f;
+            font-size:24px;
+            color: #fff;
+            padding:14px 0;
+            border-radius: 8px;
+            margin-top:40px;
+        }
+        .login_content>button:nth-of-type(2){
+            display:block;
+            margin:0 auto;
+            background: url("../image/share_friend.png")no-repeat 10px center;
+            background-size:auto 20px ;
+            border: 1px solid #888;
+            font-size:20px;
+            padding:14px 10px 14px 44px;
+            border-radius: 8px;
+            margin-top:40px;
+        }
+    </style>
+</head>
+<body>
+      <div class="login_content">
+          <div class="login_y">
+              <input type="text" placeholder="用户名" class="user">
+          </div>
+          <div class="login_y">
+              <input type="text" placeholder="密码" class="password">
+          </div>
+          <button onclick="login_in()">登录</button>
+          <button>使用微信登录</button>
+      </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script src="../script/jquery-1.12.3.min.js"></script>
+<script type="text/javascript">
+
+    var login_user,login_pwd;
+
+    function login_in(){
+      login_user = $('.user').val();
+      login_pwd = $('.password').val();
+
+      api.ajax({
+          url: 'http://d.apicloud.com/mcm/api/user/login',
+          method: 'post',
+          headers: {
+            "X-APICloud-AppId": "A6914327011091",
+            "X-APICloud-AppKey": "8ac17d22e49cb7982d82796097cec52a6c7cd01d.1475375422841"
+          },
+          data: {
+            values: {
+                 "username": login_user,
+                 "password": login_pwd
+            }
+          }
+      },function(ret, err){
+        alert(JSON.stringify(ret))
+        if (ret) {
+            // 保存用户信息
+           $api.setStorage('userInfo', ret);
+           api.alert({
+               title: '提示',
+               msg: '登录成功',
+           }, function(ret, err) {
+               if (ret) {
+                   api.closeWin();
+               }
+           });
+          } else {
+              api.toast({
+                 msg: '登录失败，用户名或密码错误',
+                 duration: 2000,
+                 location: 'middle'
+             });
+          }
+      });
+    }
+    //register注册页面传递过来的用户名
+    function fnSetUsername(username_){
+      login_user = username_;
+    }
+
+</script>
+</html>

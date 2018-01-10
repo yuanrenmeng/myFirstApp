@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .register_content{
+            padding:0 30px 0 30px;
+        }
+        .register_y{
+            height:26px;
+            border-bottom: 1px solid #888;
+            margin-top: 40px;
+        }
+        .register_y input{
+            outline: none;
+        }
+        .register_content>button{
+            width: 100%;
+            background-color: #e3007f;
+            font-size:24px;
+            color: #fff;
+            padding:14px 0;
+            border-radius: 8px;
+            margin-top:40px;
+        }
+    </style>
+</head>
+<body>
+      <div class="register_content">
+          <div class="register_y">
+              <input type="text" placeholder="用户名" class="user">
+          </div>
+          <div class="register_y">
+              <input type="text" placeholder="密码" class="password">
+          </div>
+          <button onclick="registersTo()">注册</button>
+      </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script src="../script/jquery-1.12.3.min.js"></script>
+<script type="text/javascript">
+// 注册页面注册后生产的id为获取用户信息的id为登录页面的userId,登录页面自己也有个id
+    apiready = function(){
+
+    };
+    function registersTo(){
+      var register_user = $('.user').val();
+      var register_pwd = $('.password').val();
+      api.ajax({
+          url: 'https://d.apicloud.com/mcm/api/user',
+          method: 'post',
+          headers: {
+            "X-APICloud-AppId": "A6914327011091",
+            "X-APICloud-AppKey": "8ac17d22e49cb7982d82796097cec52a6c7cd01d.1475375422841"
+          },
+          data: {
+              values: {
+                   "username": register_user,
+                   "password": register_pwd
+              }
+          }
+      },function(ret, err){
+        alert(JSON.stringify(ret.username))
+          if (ret&&ret.id) {
+            api.alert({
+              title: '提示',
+               msg: '注册成功',
+            },function(ret ,err){
+                if(ret){
+                  // 跨窗口执行Script, 将用户名传给登录页面
+                  api.execScript({
+                      name: 'login',
+                      frameName: 'longin_frame',
+                      script: 'fnSetUsername(\"' + register_user + '\");'
+                  });
+                  api.closeWin();
+                }
+            })
+              // alert( JSON.stringify( ret.id ) );
+              // alert( JSON.stringify( ret.username ) );
+          } else {
+            api.toast({
+              msg: '注册失败，用户名已被占用',
+              duration: 2000,
+              location: 'middle'
+          });
+          }
+      });
+
+    }
+</script>
+</html>

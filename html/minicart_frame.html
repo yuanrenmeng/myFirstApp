@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>购物车</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: transparent;
+        }
+        .shop_car{
+            display: inline-block;
+            background: url(../image/minicart.png) no-repeat right center;
+            width: auto;
+            min-width:36px;
+            height: 36px;
+            line-height:25px;
+            background-size: auto 36px;
+            padding:4px;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+        .shop_car span:not(:nth-of-type(3)){
+            color: #fff;
+            font-size: 12px;
+        }
+        .count {
+            display: inline;
+            box-sizing: border-box;
+            padding-left: 4px;
+            padding-right: 4px;
+            width: auto;
+            min-width: 25px;
+            height: 25px;
+            border-radius: 14px;
+            background-color: #fff;
+            text-align: center;
+            color: #e3007f;
+            font-size: 14px
+        }
+    </style>
+</head>
+<body>
+  <div class="shop_car">
+      <span>&yen;</span>
+      <span class="price">0</span>
+      <span id="count" class="count"></span>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script src="../script/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="../script/comen.js"></script>
+<script type="text/javascript">
+  var arr = [];
+  var prices = 0;//全局变量存放添加的商品的总价格
+  var count = 0;//全局变量存放添加的商品的总数量
+  var wareId = [];//存放每次点击商品的id
+  var wareId_ =[];//数组去重后的id
+  apiready = function(){
+    //监听main_frame页面的自定义事件updateShoppingCart
+    api.addEventListener({
+        name: 'updateShoppingCart'
+     }, function(ret, err){
+        if( ret ){
+          // console.log(JSON.stringify(ret.value.num));
+          prices+=ret.value.price;
+          count += ret.value.num;
+        
+          wareId.push(ret.value.wareId);//把每次点击的商品的id存放好，有重复要去重
+          //数组去重
+          for(var i=0;i<wareId.length;i++){
+            if(wareId_.indexOf(wareId[i])==-1){
+              wareId_.push(wareId[i]);
+            }
+          }
+          $('.price').html(prices.toFixed(1));//parseFloat的精度问题
+          $('.count').css('display','inline-block');
+          $('.count').html(count);
+        }else{
+             alert( JSON.stringify( err.value.price ) );
+        }
+    });
+
+
+
+    //监听整个页面的点击事件
+    api.addEventListener({
+        name:'tap'
+    }, function(ret, err){
+       api.openWin({
+           name: 'shoppingcart',
+           url: './shoppingcart.html',
+           pageParam: {
+               wareId: wareId_
+           }
+       });
+
+    });
+  }
+</script>
+</html>
