@@ -60,6 +60,7 @@
   var count = 0;//全局变量存放添加的商品的总数量
   var wareId = [];//存放每次点击商品的id
   var wareId_ =[];//数组去重后的id
+  var aa;
   apiready = function(){
     //监听main_frame页面的自定义事件updateShoppingCart
     api.addEventListener({
@@ -69,7 +70,7 @@
           // console.log(JSON.stringify(ret.value.num));
           prices+=ret.value.price;
           count += ret.value.num;
-        
+
           wareId.push(ret.value.wareId);//把每次点击的商品的id存放好，有重复要去重
           //数组去重
           for(var i=0;i<wareId.length;i++){
@@ -84,22 +85,31 @@
              alert( JSON.stringify( err.value.price ) );
         }
     });
-
-
-
     //监听整个页面的点击事件
     api.addEventListener({
         name:'tap'
-    }, function(ret, err){
+     }, function(ret, err){
        api.openWin({
            name: 'shoppingcart',
            url: './shoppingcart.html',
            pageParam: {
-               wareId: wareId_
+               wareId: wareId_,
+               prices:prices,
+               count:count,
            }
        });
-
     });
+
+  }
+  function a(data){
+      var jsfn = 'fnAdds("'+data+'")';
+      var timer = setTimeout(function(){
+        api.execScript({
+            name: 'shoppingcart',
+            frameName: 'shoppingcart_frame',
+            script: jsfn
+        });
+      },2000)
   }
 </script>
 </html>

@@ -199,6 +199,8 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script src="../script/jquery-1.12.3.min.js"></script>
+<script src="../script/comen.js"></script>
+<script src="https://ciphertrick.com/demo/jquerysession/js/jquerysession.js"></script>
 <script type="text/javascript">
 apiready = function() {
   var count =0;
@@ -251,9 +253,9 @@ apiready = function() {
                     '</div>'+
                 '</div>'+
               '  <div class="control">'+
-                    '<img class="minus" src="../image/minus.png" onclick=fnMinus("'+ret[i].id+'")>'+
+                    '<img class="minus" src="../image/minus.png" onclick=fnMinuss("'+ret[i].id+'")>'+
                     '<div id="'+ret[i].id+'" class="count">'+0+'</div>'+
-                    '<img class="add" src="../image/add.png"  onclick=fnAdd("'+ret[i].id+'")>'+
+                    '<img class="add" src="../image/add.png"  onclick=fnAdds("'+ret[i].id+'")>'+
                 '</div>'+
             '</div>'
           }
@@ -263,14 +265,15 @@ apiready = function() {
 };
 
 // 减
-function fnMinus(data){
+function fnMinuss(data){
   var id ="#"+data;
   var count = $(id);
   var countNum = parseInt(count.html());
   countNum -=1;
+  // countNum--;
   count.html(countNum);
   count.parents('.ware').css('display',(countNum>0)?'block':'none');
-  var yuan = parseFloat(count.parents('.more').siblings('.prodoct_msg').children('.price').html().slice(1));
+  var yuan = parseFloat(count.parents('.control').siblings('.content').find('.price').html().slice(1));
   api.sendEvent({
         name: 'updateShoppingCart',
         extra: {
@@ -282,25 +285,30 @@ function fnMinus(data){
     });
 }
 //加
-function fnAdd(data){
+function fnAdds(data){
+  console.log(111);
   var id ="#"+data;
   var count = $(id);
   var countNum = parseInt(count.html());
+  //  var countNum = $.session.get('changcount');
+  //  console.log($.session.get('changcount'))
+  // console.log(countNum)
   countNum+=1;
+  // countNum++;
   count.html(countNum);
   count.parent().css('display',(countNum>0)?'block':'none');
   var yuan = parseFloat(count.parents());
-  console.log(JSON.stringify(yuan));
-  api.sendEvent({
-        name: 'updateShoppingCart',
-        extra: {
-            price: yuan, //每次点击的时候把点击的商品的单价传过去（minicart_frame页面）
-            num: 1,   //每次点击的时候传个1过去表示点击一次（minicart_frame页面）
-            wareId:data,//把当个点击的商品的数量传到shoppingcart_frame页面中
-            countnum:countNum,
-        }
-    });
+  // api.sendEvent({
+  //       name: 'updateShoppingCart',
+  //       extra: {
+  //           price: yuan, //每次点击的时候把点击的商品的单价传过去（minicart_frame页面）
+  //           num: 1,   //每次点击的时候传个1过去表示点击一次（minicart_frame页面）
+  //           wareId:data,//把当个点击的商品的数量传到shoppingcart_frame页面中
+  //           countnum:countNum,
+  //       }
+  //   });
 }
+
 </script>
 
 </html>

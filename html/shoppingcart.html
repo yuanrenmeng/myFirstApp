@@ -219,11 +219,14 @@ apiready = function() {
       vScrollBarEnabled: true,
       hScrollBarEnabled: true
   });
+  $(".amount").html(api.pageParam.prices.toFixed(1));
+  $('.count').html(api.pageParam.count);
 };
 
 function back(){
     api.closeWin();
 }
+
 </script>
 
 </html>

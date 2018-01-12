@@ -312,13 +312,13 @@ function openFrames(){
               h:"auto"
           },
           pageParam: {name: 'pageparam'},
+          reload: false,
           bounces: false //弹动关闭
       });
       // 将mini购物车Frame放置在首页Window所有Frame的最上层
       api.bringFrameToFront({
           from: 'minicart_frame'
       });
-
 }
 //更新菜单选中样式
 function changNavSelect(index_){

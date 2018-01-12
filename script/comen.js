@@ -1,3 +1,5 @@
-window.price = 0;//存放商品的总价格
-window.Num = 0 ;//存放商品的总数量
-var arr = [];
+var price = 0;//存放商品的价格
+var countNum = 0 ;//存放商品的数量
+// function a(){
+//   console.log(countNum+"------");
+// }
